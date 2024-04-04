@@ -11,7 +11,6 @@ pieces = {
 
 def mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
     piece = matrice[ligne_depart][colonne_depart]
-    
     # Vérifier si le type de pièce est valide
     if type_piece in pieces.values():
         # Implémenter la logique de mouvement en fonction du type de pièce
@@ -23,10 +22,11 @@ def mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonn
                 matrice[ligne_arrivee][colonne_arrivee] = piece
                 return True
         elif type_piece == pieces['cavalier']:
-            # Logique de mouvement pour un cavalier
-            # Implémentez la logique de mouvement pour le cavalier selon les règles d'échecs
-            # ...
-            pass
+            if (colonne_depart == colonne_arrivee+1 or colonne_depart == colonne_arrivee-1) and (ligne_arrivee==ligne_depart+2 or ligne_arrivee==ligne_depart-2):
+                print("if condition valid!")
+                matrice[ligne_depart][colonne_depart] = 0
+                matrice[ligne_arrivee][colonne_arrivee] = piece
+            return True
         elif type_piece == pieces['fou']:
             # Logique de mouvement pour un fou
             # Implémentez la logique de mouvement pour le fou selon les règles d'échecs
@@ -82,11 +82,11 @@ matrice[7][7] = pieces['tour']
 # Afficher la matrice résultante
 for row in matrice:
     print(row)
-ligne_depart = 1
+ligne_depart = 0
 colonne_depart = 1
 ligne_arrivee = 3
 colonne_arrivee = 0
-type_piece = pieces['pion']
+type_piece = pieces['cavalier']
 
 print("Matrice avant le mouvement:")
 for row in matrice:
