@@ -48,28 +48,56 @@ def mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonn
             # ...
             pass
 
+# Initialiser une matrice 8x8 avec des zéros
+matrice = [[0 for _ in range(8)] for _ in range(8)]
 
-def main():
-    matrice = [[0 for _ in range(8)] for _ in range(8)]
-    ligne_depart = 1
-    colonne_depart = 0
-    ligne_arrivee = 2
-    colonne_arrivee = 0
-    type_piece = pieces['pion']
+# Placer des pions sur la première rangée (indice 0)
+for j in range(8):
+    matrice[1][j] = pieces['pion']
 
-    print("Matrice avant le mouvement:")
-    for row in matrice:
-        print(row)
+# Placer des pions sur l'avant-dernière rangée (indice 6)
+for j in range(8):
+    matrice[6][j] = pieces['pion']
 
-    print("\nEffectuer le mouvement:")
-    if mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
-        print("Mouvement réussi!")
-    else:
-        print("Mouvement invalide.")
+# Placer des autres pièces sur la deuxième rangée (indice 0)
+matrice[0][0] = pieces['tour']
+matrice[0][1] = pieces['cavalier']
+matrice[0][2] = pieces['fou']
+matrice[0][3] = pieces['reine']
+matrice[0][4] = pieces['roi']
+matrice[0][5] = pieces['fou']
+matrice[0][6] = pieces['cavalier']
+matrice[0][7] = pieces['tour']
 
-    print("\nMatrice après le mouvement:")
-    for row in matrice:
-        print(row)
+# Placer des autres pièces sur la dernière rangée (indice 7)
+matrice[7][0] = pieces['tour']
+matrice[7][1] = pieces['cavalier']
+matrice[7][2] = pieces['fou']
+matrice[7][3] = pieces['reine']
+matrice[7][4] = pieces['roi']
+matrice[7][5] = pieces['fou']
+matrice[7][6] = pieces['cavalier']
+matrice[7][7] = pieces['tour']
 
-if "__name__" == "__main__":
-    main()
+# Afficher la matrice résultante
+for row in matrice:
+    print(row)
+ligne_depart = 1
+colonne_depart = 1
+ligne_arrivee = 3
+colonne_arrivee = 0
+type_piece = pieces['pion']
+
+print("Matrice avant le mouvement:")
+for row in matrice:
+    print(row)
+
+print("\nEffectuer le mouvement:")
+if mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
+    print("Mouvement réussi!")
+else:
+    print("Mouvement invalide.")
+
+print("\nMatrice après le mouvement:")
+for row in matrice:
+    print(row)
