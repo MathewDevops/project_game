@@ -82,21 +82,30 @@ matrice[7][7] = pieces['tour']
 # Afficher la matrice résultante
 for row in matrice:
     print(row)
-ligne_depart = 0
-colonne_depart = 1
-ligne_arrivee = 3
-colonne_arrivee = 0
+
+print(f'----------------------\n\n ----- DEBUG ----- ')
+
+ligne_depart = int(input("ligne depart ? "))
+colonne_depart = int(input("colonne depart ? "))
+ligne_arrivee = int(input("ligne arrivee ? "))
+colonne_arrivee = int(input("colonne arrivee ? "))
 type_piece = pieces['cavalier']
+
+print(f'\n')
 
 print("Matrice avant le mouvement:")
 for row in matrice:
     print(row)
 
+mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece)
+
+"""
 print("\nEffectuer le mouvement:")
 if mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
     print("Mouvement réussi!")
 else:
     print("Mouvement invalide.")
+"""
 
 print("\nMatrice après le mouvement:")
 for row in matrice:
