@@ -17,16 +17,19 @@ def mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonn
         if type_piece == pieces['pion']:
             # Vérifier si le déplacement est valide pour un pion
             if colonne_depart == colonne_arrivee and ligne_arrivee == ligne_depart + 1:
-                # Déplacer le pion vers la nouvelle position
-                matrice[ligne_depart][colonne_depart] = 0
-                matrice[ligne_arrivee][colonne_arrivee] = piece
-                return True
+                # Vérifier si la case d'arrivée est libre
+                if matrice[ligne_arrivee][colonne_arrivee] == 0:
+                    # Déplacer le pion vers la nouvelle position
+                    matrice[ligne_depart][colonne_depart] = 0
+                    matrice[ligne_arrivee][colonne_arrivee] = piece
+                    return True
         elif type_piece == pieces['cavalier']:
             if (colonne_depart == colonne_arrivee+1 or colonne_depart == colonne_arrivee-1) and (ligne_arrivee==ligne_depart+2 or ligne_arrivee==ligne_depart-2):
-                print("if condition valid!")
-                matrice[ligne_depart][colonne_depart] = 0
-                matrice[ligne_arrivee][colonne_arrivee] = piece
-            return True
+                # Vérifier si la case d'arrivée est libre
+                if matrice[ligne_arrivee][colonne_arrivee] == 0:
+                    matrice[ligne_depart][colonne_depart] = 0
+                    matrice[ligne_arrivee][colonne_arrivee] = piece
+                    return True
         elif type_piece == pieces['fou']:
             # Logique de mouvement pour un fou
             # Implémentez la logique de mouvement pour le fou selon les règles d'échecs
@@ -47,6 +50,7 @@ def mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonn
             # Implémentez la logique de mouvement pour le roi selon les règles d'échecs
             # ...
             pass
+    return False
 
 # Initialiser une matrice 8x8 avec des zéros
 matrice = [[0 for _ in range(8)] for _ in range(8)]
