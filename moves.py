@@ -9,49 +9,241 @@ pieces = {
     'roi': 6
 }
 
-def mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
-    piece = matrice[ligne_depart][colonne_depart]
-    # Vérifier si le type de pièce est valide
-    if type_piece in pieces.values():
-        # Implémenter la logique de mouvement en fonction du type de pièce
-        if type_piece == pieces['pion']:
-            # Vérifier si le déplacement est valide pour un pion
-            if colonne_depart == colonne_arrivee and ligne_arrivee == ligne_depart + 1:
-                # Vérifier si la case d'arrivée est libre
-                if matrice[ligne_arrivee][colonne_arrivee] == 0:
-                    # Déplacer le pion vers la nouvelle position
-                    matrice[ligne_depart][colonne_depart] = 0
-                    matrice[ligne_arrivee][colonne_arrivee] = piece
+def demander_coordonnees():
+    print("\n")
+    ligne_depart = int(input("Entrez la ligne de départ : "))
+    colonne_depart = int(input("Entrez la colonne de départ : "))
+    ligne_arrivee = int(input("Entrez la ligne d'arrivée : "))
+    colonne_arrivee = int(input("Entrez la colonne d'arrivée : "))
+    type_piece = int(input("Entrez le type de pièce (numéro): "))
+    return ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece
+
+def verifier_victoire(matrice, joueur):
+    # Vérifie si le joueur a gagné
+    roi_joueur = pieces['roi'] * joueur
+
+    # Vérifie s'il reste un roi sur le plateau
+    roi_present = False
+    for ligne in matrice:
+        if roi_joueur in ligne:
+            roi_present = True
+            break
+
+    if not roi_present:
+        # Si le roi du joueur n'est pas présent, l'adversaire gagne
+        return 3 - joueur
+    
+    return False  # Pas de victoire pour l'instant
+
+def est_en_echec(matrice, joueur):
+    roi = pieces['roi'] if joueur == 1 else -pieces['roi']
+    roi_position = trouver_roi(matrice, roi)
+
+    if roi_position is None:
+        return False
+
+    roi_x, roi_y = roi_position
+    print(f"Position du roi: ({roi_x}, {roi_y})")  
+
+    for i in range(len(matrice)):
+        for j in range(len(matrice[i])):
+            piece = matrice[i][j]
+            if piece != 0 and (piece > 0) != (joueur == 1):
+                if mouvement_est_valide(matrice, i, j, roi_x, roi_y, piece):
                     return True
-        elif type_piece == pieces['cavalier']:
-            if (colonne_depart == colonne_arrivee+1 or colonne_depart == colonne_arrivee-1) and (ligne_arrivee==ligne_depart+2 or ligne_arrivee==ligne_depart-2):
-                # Vérifier si la case d'arrivée est libre
-                if matrice[ligne_arrivee][colonne_arrivee] == 0:
-                    matrice[ligne_depart][colonne_depart] = 0
-                    matrice[ligne_arrivee][colonne_arrivee] = piece
-                    return True
-        elif type_piece == pieces['fou']:
-            # Logique de mouvement pour un fou
-            # Implémentez la logique de mouvement pour le fou selon les règles d'échecs
-            # ...
-            pass
-        elif type_piece == pieces['tour']:
-            # Logique de mouvement pour une tour
-            # Implémentez la logique de mouvement pour la tour selon les règles d'échecs
-            # ...
-            pass
-        elif type_piece == pieces['reine']:
-            # Logique de mouvement pour une reine
-            # Implémentez la logique de mouvement pour la reine selon les règles d'échecs
-            # ...
-            pass
-        elif type_piece == pieces['roi']:
-            # Logique de mouvement pour un roi
-            # Implémentez la logique de mouvement pour le roi selon les règles d'échecs
-            # ...
-            pass
     return False
 
+def est_en_echec_et_mat(matrice, joueur):
+    if not est_en_echec(matrice, joueur):
+        return False, False
+    
+    for i in range(len(matrice)):
+        for j in range(len(matrice[i])):
+            piece = matrice[i][j]
+            if piece != 0 and (piece > 0) == (joueur == 1):
+                for k in range(len(matrice)):
+                    for l in range(len(matrice[k])):
+                        if mouvement_est_valide(matrice, i, j, k, l):
+                            matrice_temporaire = [row[:] for row in matrice]
+                            matrice_temporaire[i][j] = 0
+                            matrice_temporaire[k][l] = piece
+                            if not est_en_echec(matrice_temporaire, joueur):
+                                return True, False
+    return True, True
+
+def trouver_roi(matrice, roi):
+    for i in range(len(matrice)):
+        for j in range(len(matrice[i])):
+            if matrice[i][j] == roi:
+                return (i, j)
+    return None
+
+def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
+    # Récupérer la pièce de départ et la pièce d'arrivée de la matrice
+    piece = matrice[ligne_depart][colonne_depart]
+    piece_arrivee = matrice[ligne_arrivee][colonne_arrivee]
+
+    # Vérifier si les coordonnées sont en dehors des limites de la matrice
+    if ligne_arrivee < 0 or colonne_arrivee < 0 or ligne_arrivee >= len(matrice) or colonne_arrivee >= len(matrice[0]):
+        return False
+
+    # Vérifier si le déplacement reste sur la même case
+    if ligne_depart == ligne_arrivee and colonne_depart == colonne_arrivee:
+        return False
+
+    # Vérifier si le type de pièce est valide
+    if type_piece in pieces.values():
+        joueur = 1 if piece > 0 else 2
+        direction = 1 if joueur == 1 else -1
+        adverse_piece = lambda p: p < 0 if joueur == 1 else p > 0
+
+        # Vérification spécifique pour chaque type de pièce
+        if type_piece == pieces['pion']:
+            # Mouvement vers l'avant d'une case
+            if colonne_depart == colonne_arrivee and ligne_arrivee == ligne_depart + direction and piece_arrivee == 0:
+                return True
+            # Capture diagonale
+            elif abs(colonne_depart - colonne_arrivee) == 1 and ligne_arrivee == ligne_depart + direction and adverse_piece(piece_arrivee):
+                return True
+        elif type_piece == pieces['cavalier']:
+            # Mouvement en L
+            if (abs(colonne_depart - colonne_arrivee) == 1 and abs(ligne_depart - ligne_arrivee) == 2) or (abs(colonne_depart - colonne_arrivee) == 2 and abs(ligne_depart - ligne_arrivee) == 1):
+                if piece_arrivee == 0 or adverse_piece(piece_arrivee):
+                    return True
+        elif type_piece == pieces['fou']:
+            # Mouvement diagonal
+            if abs(colonne_depart - colonne_arrivee) == abs(ligne_depart - ligne_arrivee):
+                step_col = 1 if colonne_arrivee > colonne_depart else -1
+                step_row = 1 if ligne_arrivee > ligne_depart else -1
+                clear_path = True
+                for step in range(1, abs(colonne_depart - colonne_arrivee)):
+                    if matrice[ligne_depart + step * step_row][colonne_depart + step * step_col] != 0:
+                        clear_path = False
+                        break
+                if clear_path and (piece_arrivee == 0 or adverse_piece(piece_arrivee)):
+                    return True
+        elif type_piece == pieces['tour']:
+            # Mouvement horizontal ou vertical
+            if ligne_depart == ligne_arrivee or colonne_depart == colonne_arrivee:
+                if ligne_depart == ligne_arrivee:
+                    step = 1 if colonne_arrivee > colonne_depart else -1
+                    clear_path = all(matrice[ligne_depart][col] == 0 for col in range(colonne_depart + step, colonne_arrivee, step))
+                else:
+                    step = 1 if ligne_arrivee > ligne_depart else -1
+                    clear_path = all(matrice[row][colonne_depart] == 0 for row in range(ligne_depart + step, ligne_arrivee, step))
+                if clear_path and (piece_arrivee == 0 or adverse_piece(piece_arrivee)):
+                    return True
+        elif type_piece == pieces['reine']:
+            # Mouvement diagonal ou horizontal/vertical
+            if abs(colonne_depart - colonne_arrivee) == abs(ligne_depart - ligne_arrivee):
+                step_col = 1 if colonne_arrivee > colonne_depart else -1
+                step_row = 1 if ligne_arrivee > ligne_depart else -1
+                clear_path = True
+                for step in range(1, abs(colonne_depart - colonne_arrivee)):
+                    if matrice[ligne_depart + step * step_row][colonne_depart + step * step_col] != 0:
+                        clear_path = False
+                        break
+                if clear_path and (piece_arrivee == 0 or adverse_piece(piece_arrivee)):
+                    return True
+            elif ligne_depart == ligne_arrivee or colonne_depart == colonne_arrivee:
+                if ligne_depart == ligne_arrivee:
+                    step = 1 if colonne_arrivee > colonne_depart else -1
+                    clear_path = all(matrice[ligne_depart][col] == 0 for col in range(colonne_depart + step, colonne_arrivee, step))
+                else:
+                    step = 1 if ligne_arrivee > ligne_depart else -1
+                    clear_path = all(matrice[row][colonne_depart] == 0 for row in range(ligne_depart + step, ligne_arrivee, step))
+                if clear_path and (piece_arrivee == 0 or adverse_piece(piece_arrivee)):
+                    return True
+        elif type_piece == pieces['roi']:
+            # Mouvement d'une case dans n'importe quelle direction
+            if abs(colonne_depart - colonne_arrivee) <= 1 and abs(ligne_depart - ligne_arrivee) <= 1:
+                if piece_arrivee == 0 or adverse_piece(piece_arrivee):
+                    return True
+    return False
+
+
+def initialiser_matrice_jeu():
+    matrice = [[0 for _ in range(8)] for _ in range(8)]
+    
+    # Placer les pions
+    for i in range(8):
+        matrice[1][i] = pieces['pion'] * -1  # Pions du joueur 2 (négatif)
+        matrice[6][i] = pieces['pion']  # Pions du joueur 1 (positif)
+    
+    # Placer les pièces principales
+    pieces_order = [
+        pieces['tour'], pieces['cavalier'], pieces['fou'], pieces['reine'],
+        pieces['roi'], pieces['fou'], pieces['cavalier'], pieces['tour']
+    ]
+    
+    for i in range(8):
+        matrice[0][i] = pieces_order[i] * -1  # Pièces du joueur 2 (négatif)
+        matrice[7][i] = pieces_order[i]  # Pièces du joueur 1 (positif)
+    
+    return matrice
+
+def verifier_victoire(matrice, joueur):
+    roi_joueur_1 = False
+    roi_joueur_2 = False
+    
+    for ligne in matrice:
+        if pieces['roi'] in ligne:
+            roi_joueur_1 = True
+        if -pieces['roi'] in ligne:
+            roi_joueur_2 = True
+    
+    if not roi_joueur_1:
+        return 2  # Joueur 2 gagne
+    if not roi_joueur_2:
+        return 1  # Joueur 1 gagne
+    
+    return False  # Pas de victoire
+
+def jouer():
+    # Initialiser la matrice de jeu et placer les pièces
+    matrice = initialiser_matrice_jeu()
+    
+    # Variable pour suivre le joueur actuel
+    joueur_actuel = 1
+    
+    # Boucle principale du jeu
+    while True:
+        
+        print(f"\nJoueur {joueur_actuel}, c'est votre tour.")
+
+        print("\nMatrice avant le mouvement:\n")
+        for row in matrice:
+            print(row)
+
+        # Demander au joueur de saisir les coordonnées de départ et d'arrivée
+        ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece = demander_coordonnees()
+        
+        # Vérifier si le mouvement est valide et effectuer le déplacement
+        if mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
+            piece = matrice[ligne_depart][colonne_depart]
+            matrice[ligne_depart][colonne_depart] = 0
+            matrice[ligne_arrivee][colonne_arrivee] = piece
+            print(f"({ligne_arrivee}, {colonne_arrivee})")
+            print("Déplacement réussi !")
+        else:
+            print("Déplacement non valide, essayez de nouveau.")
+
+        en_echec, en_echec_et_mat = est_en_echec_et_mat(matrice, joueur_actuel)
+        if en_echec:
+            if en_echec_et_mat:
+                print(f"Le joueur {joueur_actuel} est en échec et mat. Fin de la partie.")
+                break
+            else:
+                print(f"Le joueur {joueur_actuel} est en échec.")
+        
+        joueur_actuel = 1 if joueur_actuel == 2 else 2
+
+        print("\nMatrice après le mouvement:")
+        for row in matrice:
+            print(row)
+jouer()
+
+"""
 # Initialiser une matrice 8x8 avec des zéros
 matrice = [[0 for _ in range(8)] for _ in range(8)]
 
@@ -103,14 +295,14 @@ for row in matrice:
 
 mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece)
 
-"""
 print("\nEffectuer le mouvement:")
 if mouvement_piece(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
     print("Mouvement réussi!")
 else:
     print("Mouvement invalide.")
-"""
+
 
 print("\nMatrice après le mouvement:")
 for row in matrice:
     print(row)
+"""
