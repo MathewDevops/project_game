@@ -220,17 +220,6 @@ def jouer():
         # Sauvegarder l'état actuel de la matrice
         matrice_sauvegarde = [row[:] for row in matrice]
         
-        en_echec, en_echec_et_mat = est_en_echec_et_mat(matrice, joueur_actuel)
-        if en_echec:
-            print(f"Le joueur {joueur_actuel} est en échec.")
-            if en_echec_et_mat:
-                print(f"Le joueur {joueur_actuel} est en échec et mat. Fin de la partie.")
-                break
-            # Le joueur doit jouer son roi
-            if type_piece != pieces['roi']:
-                print("Vous devez jouer votre roi.")
-                continue
-        
         # Vérifier si le mouvement est valide et effectuer le déplacement
         if mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
             piece = matrice[ligne_depart][colonne_depart]
