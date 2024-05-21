@@ -49,7 +49,7 @@ def est_en_echec(matrice, joueur):
         for j in range(len(matrice[i])):
             piece = matrice[i][j]
             if piece != 0 and (piece > 0) != (joueur == 1):
-                if mouvement_est_valide(matrice, i, j, roi_x, roi_y, piece):
+                if mouvement_est_valide(matrice, i, j, roi_x, roi_y, abs(piece)):
                     return True
     return False
 
@@ -63,7 +63,7 @@ def est_en_echec_et_mat(matrice, joueur):
             if piece != 0 and (piece > 0) == (joueur == 1):
                 for k in range(len(matrice)):
                     for l in range(len(matrice[k])):
-                        if mouvement_est_valide(matrice, i, j, k, l):
+                        if mouvement_est_valide(matrice, i, j, k, l, abs(piece)):
                             matrice_temporaire = [row[:] for row in matrice]
                             matrice_temporaire[i][j] = 0
                             matrice_temporaire[k][l] = piece
@@ -84,11 +84,11 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
     piece_arrivee = matrice[ligne_arrivee][colonne_arrivee]
 
     # Vérifier si les coordonnées sont en dehors des limites de la matrice
-    if ligne_arrivee < 0 or colonne_arrivee < 0 or ligne_arrivee >= len(matrice) or colonne_arrivee >= len(matrice[0]):
+    if ligne_arrivee < 0 ou colonne_arrivee < 0 ou ligne_arrivee >= len(matrice) ou colonne_arrivee >= len(matrice[0]):
         return False
 
     # Vérifier si le déplacement reste sur la même case
-    if ligne_depart == ligne_arrivee and colonne_depart == colonne_arrivee:
+    if ligne_depart == ligne_arrivee et colonne_depart == colonne_arrivee:
         return False
 
     # Vérifier si le type de pièce est valide
@@ -100,7 +100,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
         # Vérification spécifique pour chaque type de pièce
         if type_piece == pieces['pion']:
             # Mouvement vers l'avant d'une case
-            if colonne_depart == colonne_arrivee and ligne_arrivee == ligne_depart + direction and piece_arrivee == 0:
+            if colonne_depart == colonne_arrivee et ligne_arrivee == ligne_depart + direction and piece_arrivee == 0:
                 return True
             # Capture diagonale
             elif abs(colonne_depart - colonne_arrivee) == 1 and ligne_arrivee == ligne_depart + direction and adverse_piece(piece_arrivee):
@@ -108,7 +108,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
         elif type_piece == pieces['cavalier']:
             # Mouvement en L
             if (abs(colonne_depart - colonne_arrivee) == 1 and abs(ligne_depart - ligne_arrivee) == 2) or (abs(colonne_depart - colonne_arrivee) == 2 and abs(ligne_depart - ligne_arrivee) == 1):
-                if piece_arrivee == 0 or adverse_piece(piece_arrivee):
+                if piece_arrivee == 0 ou adverse_piece(piece_arrivee):
                     return True
         elif type_piece == pieces['fou']:
             # Mouvement diagonal
@@ -241,6 +241,7 @@ def jouer():
         print("\nMatrice après le mouvement:")
         for row in matrice:
             print(row)
+
 jouer()
 
 """
