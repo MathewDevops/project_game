@@ -208,15 +208,17 @@ def jouer():
     
     # Boucle principale du jeu
     while True:
-        
         print(f"\nJoueur {joueur_actuel}, c'est votre tour.")
-
+        
         print("\nMatrice avant le mouvement:\n")
         for row in matrice:
             print(row)
-
+        
         # Demander au joueur de saisir les coordonnées de départ et d'arrivée
         ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece = demander_coordonnees()
+        
+        # Sauvegarder l'état actuel de la matrice
+        matrice_sauvegarde = [row[:] for row in matrice]
         
         # Vérifier si le mouvement est valide et effectuer le déplacement
         if mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
@@ -227,6 +229,8 @@ def jouer():
             print("Déplacement réussi !")
         else:
             print("Déplacement non valide, essayez de nouveau.")
+            matrice = matrice_sauvegarde
+            continue  # Passer à la prochaine itération sans changer de joueur
 
         en_echec, en_echec_et_mat = est_en_echec_et_mat(matrice, joueur_actuel)
         if en_echec:
@@ -243,7 +247,6 @@ def jouer():
             print(row)
 
 jouer()
-
 """
 # Initialiser une matrice 8x8 avec des zéros
 matrice = [[0 for _ in range(8)] for _ in range(8)]
