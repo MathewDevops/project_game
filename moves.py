@@ -100,7 +100,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
         # Vérification spécifique pour chaque type de pièce
         if type_piece == pieces['pion']:
             # Mouvement vers l'avant d'une case
-            if colonne_depart == colonne_arrivee et ligne_arrivee == ligne_depart + direction and piece_arrivee == 0:
+            if colonne_depart == colonne_arrivee or ligne_arrivee == ligne_depart + direction and piece_arrivee == 0:
                 return True
             # Capture diagonale
             elif abs(colonne_depart - colonne_arrivee) == 1 and ligne_arrivee == ligne_depart + direction and adverse_piece(piece_arrivee):
@@ -108,7 +108,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
         elif type_piece == pieces['cavalier']:
             # Mouvement en L
             if (abs(colonne_depart - colonne_arrivee) == 1 and abs(ligne_depart - ligne_arrivee) == 2) or (abs(colonne_depart - colonne_arrivee) == 2 and abs(ligne_depart - ligne_arrivee) == 1):
-                if piece_arrivee == 0 ou adverse_piece(piece_arrivee):
+                if piece_arrivee == 0 or adverse_piece(piece_arrivee):
                     return True
         elif type_piece == pieces['fou']:
             # Mouvement diagonal
