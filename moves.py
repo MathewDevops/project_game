@@ -84,11 +84,11 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
     piece_arrivee = matrice[ligne_arrivee][colonne_arrivee]
 
     # Vérifier si les coordonnées sont en dehors des limites de la matrice
-    if ligne_arrivee < 0 ou colonne_arrivee < 0 ou ligne_arrivee >= len(matrice) ou colonne_arrivee >= len(matrice[0]):
+    if ligne_arrivee < 0 or colonne_arrivee < 0 or ligne_arrivee >= len(matrice) or colonne_arrivee >= len(matrice[0]):
         return False
 
     # Vérifier si le déplacement reste sur la même case
-    if ligne_depart == ligne_arrivee et colonne_depart == colonne_arrivee:
+    if ligne_depart == ligne_arrivee and colonne_depart == colonne_arrivee:
         return False
 
     # Vérifier si le type de pièce est valide
