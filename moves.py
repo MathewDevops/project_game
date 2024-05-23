@@ -212,9 +212,10 @@ def jouer():
                 continue
             
             piece = matrice[ligne_depart][colonne_depart]
-            if piece * (1 if joueur_actuel == 1 else -1) <= 0:
+            if (joueur_actuel == 1 and piece <= 0) or (joueur_actuel == 2 and piece >= 0):
                 print("Erreur : Vous devez déplacer une de vos propres pièces.")
                 continue
+            
             
             if not mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
                 print("Erreur : Mouvement invalide.")
