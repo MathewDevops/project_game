@@ -73,7 +73,6 @@ def trouver_pieces_adverses(matrice, joueur):
         return pieces_adverses
 
 def est_en_echec_et_mat(matrice, joueur):
-    roi = trouver_roi(matrice, joueur)
     pieces_adverses = trouver_pieces_adverses(matrice, joueur)
     for piece in pieces_adverses:
         ligne_depart, colonne_depart = piece
@@ -86,7 +85,7 @@ def est_en_echec_et_mat(matrice, joueur):
                     matrice_temp[ligne_depart][colonne_depart] = 0  # Met à jour la matrice temporaire
                     if not est_en_echec(matrice_temp, joueur):
                         return False, False  # Il y a un mouvement possible pour sortir de l'échec
-    return True, True  # Échec et mat
+    return True, est_en_echec(matrice, joueur)  # Échec et mat s'il n'y a pas de mouvement possible pour sortir de l'échec
 
 def trouver_roi(matrice, roi):
     for i in range(len(matrice)):
