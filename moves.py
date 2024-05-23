@@ -210,11 +210,10 @@ def jouer():
             if echec and type_piece != pieces['roi']:
                 print("Erreur : Vous êtes en échec. Vous devez déplacer votre roi.")
                 continue
-            
-            print("Piece:", piece)
-            print("Joueur actuel:", joueur_actuel)
     
             piece = matrice[ligne_depart][colonne_depart]
+            print("Piece:", piece)
+            print("Joueur actuel:", joueur_actuel)
             if (joueur_actuel == 1 and piece <= 0) or (joueur_actuel == 2 and piece >= 0):
                 print("Erreur : Vous devez déplacer une de vos propres pièces.")
                 continue
