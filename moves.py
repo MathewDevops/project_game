@@ -109,7 +109,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
                 return True
         elif type_piece == pieces['cavalier']:
             if (abs(colonne_depart - colonne_arrivee) == 1 and abs(ligne_depart - ligne_arrivee) == 2) or (abs(colonne_depart - colonne_arrivee) == 2 and abs(ligne_depart - ligne_arrivee) == 1):
-                if piece_arrivee == 0 or adverse_piece(piece_arrivee):
+                if piece_arrivee == 0 or (piece_arrivee != 0 and adverse_piece(piece_arrivee)):
                     return True
         elif type_piece == pieces['fou']:
             if abs(colonne_depart - colonne_arrivee) == abs(ligne_depart - ligne_arrivee):
@@ -120,7 +120,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
                     if matrice[ligne_depart + step * step_row][colonne_depart + step * step_col] != 0:
                         clear_path = False
                         break
-                if clear_path and (piece_arrivee == 0 or adverse_piece(piece_arrivee)):
+                if clear_path and (piece_arrivee == 0 or (piece_arrivee != 0 and adverse_piece(piece_arrivee))):
                     return True
         elif type_piece == pieces['tour']:
             if ligne_depart == ligne_arrivee or colonne_depart == colonne_arrivee:
@@ -130,7 +130,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
                 else:
                     step = 1 if ligne_arrivee > ligne_depart else -1
                     clear_path = all(matrice[row][colonne_depart] == 0 for row in range(ligne_depart + step, ligne_arrivee, step))
-                if clear_path and (piece_arrivee == 0 or adverse_piece(piece_arrivee)):
+                if clear_path and (piece_arrivee == 0 or (piece_arrivee != 0 and adverse_piece(piece_arrivee))):
                     return True
         elif type_piece == pieces['reine']:
             if abs(colonne_depart - colonne_arrivee) == abs(ligne_depart - ligne_arrivee):
@@ -141,7 +141,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
                     if matrice[ligne_depart + step * step_row][colonne_depart + step * step_col] != 0:
                         clear_path = False
                         break
-                if clear_path and (piece_arrivee == 0 or adverse_piece(piece_arrivee)):
+                if clear_path and (piece_arrivee == 0 or (piece_arrivee != 0 and adverse_piece(piece_arrivee))):
                     return True
             elif ligne_depart == ligne_arrivee or colonne_depart == colonne_arrivee:
                 if ligne_depart == ligne_arrivee:
@@ -150,11 +150,11 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
                 else:
                     step = 1 if ligne_arrivee > ligne_depart else -1
                     clear_path = all(matrice[row][colonne_depart] == 0 for row in range(ligne_depart + step, ligne_arrivee, step))
-                if clear_path and (piece_arrivee == 0 or adverse_piece(piece_arrivee)):
+                if clear_path and (piece_arrivee == 0 or (piece_arrivee != 0 and adverse_piece(piece_arrivee))):
                     return True
         elif type_piece == pieces['roi']:
             if abs(colonne_depart - colonne_arrivee) <= 1 and abs(ligne_depart - ligne_arrivee) <= 1:
-                if piece_arrivee == 0 or adverse_piece(piece_arrivee):
+                if piece_arrivee == 0 or (piece_arrivee != 0 and adverse_piece(piece_arrivee)):
                     return True
     return False
 
