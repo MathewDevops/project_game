@@ -28,21 +28,22 @@ def demander_coordonnees():
             print("Erreur : Veuillez entrer des nombres entiers pour les coordonnées.")
 
 def verifier_victoire(matrice, joueur):
-    # Vérifie si le joueur a gagné
-    roi_joueur = pieces['roi'] * joueur
-
-    # Vérifie s'il reste un roi sur le plateau
-    roi_present = False
-    for ligne in matrice:
-        if roi_joueur in ligne:
-            roi_present = True
-            break
-
-    if not roi_present:
-        # Si le roi du joueur n'est pas présent, l'adversaire gagne
-        return 3 - joueur
+    roi_joueur_1 = False
+    roi_joueur_2 = False
     
-    return False  # Pas de victoire pour l'instant
+    for ligne in matrice:
+        if pieces['roi'] in ligne:
+            roi_joueur_1 = True
+        if -pieces['roi'] in ligne:
+            roi_joueur_2 = True
+    
+    if not roi_joueur_1:
+        return 2  # Joueur 2 gagne
+    if not roi_joueur_2:
+        return 1  # Joueur 1 gagne
+    
+    return False  # Pas de victoire
+
 
 def est_en_echec(matrice, joueur):
     roi = pieces['roi'] if joueur == 1 else -pieces['roi']
