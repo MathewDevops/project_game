@@ -63,23 +63,30 @@ def est_en_echec(matrice, joueur):
                     return True
     return False
 
+def trouver_pieces_adverses(matrice, joueur):
+        pieces_adverses = []
+        for i in range(len(matrice)):
+            for j in range(len(matrice[i])):
+                piece = matrice[i][j]
+                if piece * joueur < 0:
+                    pieces_adverses.append((i, j))
+        return pieces_adverses
+
 def est_en_echec_et_mat(matrice, joueur):
-    if not est_en_echec(matrice, joueur):
-        return False, False
-    
-    for i in range(len(matrice)):
-        for j in range(len(matrice[i])):
-            piece = matrice[i][j]
-            if piece != 0 and (piece > 0) == (joueur == 1):
-                for k in range(len(matrice)):
-                    for l in range(len(matrice[k])):
-                        if mouvement_est_valide(matrice, i, j, k, l):
-                            matrice_temporaire = [row[:] for row in matrice]
-                            matrice_temporaire[i][j] = 0
-                            matrice_temporaire[k][l] = piece
-                            if not est_en_echec(matrice_temporaire, joueur):
-                                return True, False
-    return True, True
+    roi = trouver_roi(matrice, joueur)
+    pieces_adverses = trouver_pieces_adverses(matrice, joueur)
+    for piece in pieces_adverses:
+        ligne_depart, colonne_depart = piece
+        for ligne_arrivee in range(8):
+            for colonne_arrivee in range(8):
+                type_piece = abs(matrice[ligne_depart][colonne_depart])
+                if mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
+                    matrice_temp = [row[:] for row in matrice]  # Copie de la matrice pour tester le mouvement
+                    matrice_temp[ligne_arrivee][colonne_arrivee] = matrice_temp[ligne_depart][colonne_depart]
+                    matrice_temp[ligne_depart][colonne_depart] = 0  # Met à jour la matrice temporaire
+                    if not est_en_echec(matrice_temp, joueur):
+                        return False, False  # Il y a un mouvement possible pour sortir de l'échec
+    return True, True  # Échec et mat
 
 def trouver_roi(matrice, roi):
     for i in range(len(matrice)):
@@ -218,10 +225,8 @@ def jouer():
             if echec and type_piece != pieces['roi']:
                 print("Erreur : Vous êtes en échec. Vous devez déplacer votre roi.")
                 continue
-    
+
             piece = matrice[ligne_depart][colonne_depart]
-            print("Piece:", piece)
-            print("Joueur actuel:", joueur_actuel)
             if (joueur_actuel == 1 and piece <= 0) or (joueur_actuel == 2 and piece >= 0):
                 print("Erreur : Vous devez déplacer une de vos propres pièces.")
                 continue
@@ -233,7 +238,7 @@ def jouer():
             matrice[ligne_depart][colonne_depart] = 0
             matrice[ligne_arrivee][colonne_arrivee] = piece
             break
-        
+            
         victoire = verifier_victoire(matrice, joueur_actuel)
         if victoire:
             print(f"Le joueur {victoire} gagne!")
