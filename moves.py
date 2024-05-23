@@ -160,6 +160,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
     return False
 
 
+
 def initialiser_matrice_jeu():
     matrice = [[0 for _ in range(8)] for _ in range(8)]
     
