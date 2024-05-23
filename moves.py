@@ -98,7 +98,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
         return False
 
     if type_piece in pieces.values():
-        joueur = 1 if piece > 0 else 2
+        joueur = 1 if piece < 0 else 2
         direction = 1 if joueur == 1 else -1
         adverse_piece = lambda p: p < 0 if joueur == 1 else p > 0
 
