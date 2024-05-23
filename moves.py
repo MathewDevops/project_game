@@ -207,7 +207,7 @@ def jouer():
         while True:
             ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece = demander_coordonnees()
             
-            if echec et type_piece != pieces['roi']:
+            if echec and type_piece != pieces['roi']:
                 print("Erreur : Vous êtes en échec. Vous devez déplacer votre roi.")
                 continue
             
