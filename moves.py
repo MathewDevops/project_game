@@ -49,7 +49,7 @@ def est_en_echec(matrice, joueur):
         for j in range(len(matrice[i])):
             piece = matrice[i][j]
             if piece != 0 and (piece > 0) != (joueur == 1):
-                if mouvement_est_valide(matrice, i, j, roi_x, roi_y, abs(piece)):
+                if mouvement_est_valide(matrice, i, j, roi_x, roi_y, piece):
                     return True
     return False
 
@@ -63,13 +63,14 @@ def est_en_echec_et_mat(matrice, joueur):
             if piece != 0 and (piece > 0) == (joueur == 1):
                 for k in range(len(matrice)):
                     for l in range(len(matrice[k])):
-                        if mouvement_est_valide(matrice, i, j, k, l, abs(piece)):
+                        if mouvement_est_valide(matrice, i, j, k, l):
                             matrice_temporaire = [row[:] for row in matrice]
                             matrice_temporaire[i][j] = 0
                             matrice_temporaire[k][l] = piece
                             if not est_en_echec(matrice_temporaire, joueur):
                                 return True, False
     return True, True
+
 
 def trouver_roi(matrice, roi):
     for i in range(len(matrice)):
