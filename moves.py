@@ -11,12 +11,21 @@ pieces = {
 
 def demander_coordonnees():
     print("\n")
-    ligne_depart = int(input("Entrez la ligne de départ : "))
-    colonne_depart = int(input("Entrez la colonne de départ : "))
-    ligne_arrivee = int(input("Entrez la ligne d'arrivée : "))
-    colonne_arrivee = int(input("Entrez la colonne d'arrivée : "))
-    type_piece = int(input("Entrez le type de pièce (numéro): "))
-    return ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece
+    while True:
+        try:
+            ligne_depart = int(input("Entrez la ligne de départ : "))
+            colonne_depart = int(input("Entrez la colonne de départ : "))
+            ligne_arrivee = int(input("Entrez la ligne d'arrivée : "))
+            colonne_arrivee = int(input("Entrez la colonne d'arrivée : "))
+            type_piece = int(input("Entrez le type de pièce (numéro) : "))
+
+            # Vérifier si les coordonnées sont dans les limites de l'échiquier
+            if 0 <= ligne_depart < 8 and 0 <= colonne_depart < 8 and 0 <= ligne_arrivee < 8 and 0 <= colonne_arrivee < 8:
+                return ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece
+            else:
+                print("Erreur : Les coordonnées doivent être comprises entre 0 et 7.")
+        except ValueError:
+            print("Erreur : Veuillez entrer des nombres entiers pour les coordonnées.")
 
 def verifier_victoire(matrice, joueur):
     # Vérifie si le joueur a gagné
