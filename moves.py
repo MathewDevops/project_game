@@ -216,7 +216,6 @@ def jouer():
                 print("Erreur : Vous devez déplacer une de vos propres pièces.")
                 continue
             
-            
             if not mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
                 print("Erreur : Mouvement invalide.")
                 continue
