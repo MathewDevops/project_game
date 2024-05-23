@@ -79,39 +79,30 @@ def trouver_roi(matrice, roi):
     return None
 
 def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
-    # Récupérer la pièce de départ et la pièce d'arrivée de la matrice
     piece = matrice[ligne_depart][colonne_depart]
     piece_arrivee = matrice[ligne_arrivee][colonne_arrivee]
 
-    # Vérifier si les coordonnées sont en dehors des limites de la matrice
     if ligne_arrivee < 0 or colonne_arrivee < 0 or ligne_arrivee >= len(matrice) or colonne_arrivee >= len(matrice[0]):
         return False
 
-    # Vérifier si le déplacement reste sur la même case
     if ligne_depart == ligne_arrivee and colonne_depart == colonne_arrivee:
         return False
 
-    # Vérifier si le type de pièce est valide
     if type_piece in pieces.values():
         joueur = 1 if piece > 0 else 2
         direction = 1 if joueur == 1 else -1
         adverse_piece = lambda p: p < 0 if joueur == 1 else p > 0
 
-        # Vérification spécifique pour chaque type de pièce
         if type_piece == pieces['pion']:
-            # Mouvement vers l'avant d'une case
-            if colonne_depart == colonne_arrivee or ligne_arrivee == ligne_depart + direction and piece_arrivee == 0:
+            if colonne_depart == colonne_arrivee and ligne_arrivee == ligne_depart + direction and piece_arrivee == 0:
                 return True
-            # Capture diagonale
             elif abs(colonne_depart - colonne_arrivee) == 1 and ligne_arrivee == ligne_depart + direction and adverse_piece(piece_arrivee):
                 return True
         elif type_piece == pieces['cavalier']:
-            # Mouvement en L
             if (abs(colonne_depart - colonne_arrivee) == 1 and abs(ligne_depart - ligne_arrivee) == 2) or (abs(colonne_depart - colonne_arrivee) == 2 and abs(ligne_depart - ligne_arrivee) == 1):
                 if piece_arrivee == 0 or adverse_piece(piece_arrivee):
                     return True
         elif type_piece == pieces['fou']:
-            # Mouvement diagonal
             if abs(colonne_depart - colonne_arrivee) == abs(ligne_depart - ligne_arrivee):
                 step_col = 1 if colonne_arrivee > colonne_depart else -1
                 step_row = 1 if ligne_arrivee > ligne_depart else -1
@@ -123,7 +114,6 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
                 if clear_path and (piece_arrivee == 0 or adverse_piece(piece_arrivee)):
                     return True
         elif type_piece == pieces['tour']:
-            # Mouvement horizontal ou vertical
             if ligne_depart == ligne_arrivee or colonne_depart == colonne_arrivee:
                 if ligne_depart == ligne_arrivee:
                     step = 1 if colonne_arrivee > colonne_depart else -1
@@ -134,7 +124,6 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
                 if clear_path and (piece_arrivee == 0 or adverse_piece(piece_arrivee)):
                     return True
         elif type_piece == pieces['reine']:
-            # Mouvement diagonal ou horizontal/vertical
             if abs(colonne_depart - colonne_arrivee) == abs(ligne_depart - ligne_arrivee):
                 step_col = 1 if colonne_arrivee > colonne_depart else -1
                 step_row = 1 if ligne_arrivee > ligne_depart else -1
@@ -155,7 +144,6 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
                 if clear_path and (piece_arrivee == 0 or adverse_piece(piece_arrivee)):
                     return True
         elif type_piece == pieces['roi']:
-            # Mouvement d'une case dans n'importe quelle direction
             if abs(colonne_depart - colonne_arrivee) <= 1 and abs(ligne_depart - ligne_arrivee) <= 1:
                 if piece_arrivee == 0 or adverse_piece(piece_arrivee):
                     return True
