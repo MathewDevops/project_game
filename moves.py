@@ -200,51 +200,48 @@ def verifier_victoire(matrice, joueur):
     return False  # Pas de victoire
 
 def jouer():
-    # Initialiser la matrice de jeu et placer les pièces
     matrice = initialiser_matrice_jeu()
-    
-    # Variable pour suivre le joueur actuel
     joueur_actuel = 1
     
-    # Boucle principale du jeu
     while True:
-        print(f"\nJoueur {joueur_actuel}, c'est votre tour.")
+        print(f"\nJoueur {joueur_actuel}, c'est votre tour.\n")
+        for ligne in matrice:
+            print(ligne)
         
-        print("\nMatrice avant le mouvement:\n")
-        for row in matrice:
-            print(row)
-        
-        # Demander au joueur de saisir les coordonnées de départ et d'arrivée
-        ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece = demander_coordonnees()
-        
-        # Sauvegarder l'état actuel de la matrice
-        matrice_sauvegarde = [row[:] for row in matrice]
-        
-        # Vérifier si le mouvement est valide et effectuer le déplacement
-        if mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
-            piece = matrice[ligne_depart][colonne_depart]
-            matrice[ligne_depart][colonne_depart] = 0
-            matrice[ligne_arrivee][colonne_arrivee] = piece
-            print(f"({ligne_arrivee}, {colonne_arrivee})")
-            print("Déplacement réussi !")
-        else:
-            print("Déplacement non valide, essayez de nouveau.")
-            matrice = matrice_sauvegarde
-            continue  # Passer à la prochaine itération sans changer de joueur
-
-        en_echec, en_echec_et_mat = est_en_echec_et_mat(matrice, joueur_actuel)
-        if en_echec:
-            if en_echec_et_mat:
-                print(f"Le joueur {joueur_actuel} est en échec et mat. Fin de la partie.")
+        echec, echec_et_mat = est_en_echec_et_mat(matrice, joueur_actuel)
+        if echec:
+            if echec_et_mat:
+                print(f"Le joueur {joueur_actuel} est en échec et mat. Le joueur {3 - joueur_actuel} gagne!")
                 break
             else:
-                print(f"Le joueur {joueur_actuel} est en échec.")
+                print(f"Le joueur {joueur_actuel} est en échec. Vous devez jouer votre roi.")
         
-        joueur_actuel = 1 if joueur_actuel == 2 else 2
-
-        print("\nMatrice après le mouvement:")
-        for row in matrice:
-            print(row)
+        while True:
+            ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece = demander_coordonnees()
+            
+            if echec and type_piece != pieces['roi']:
+                print("Erreur : Vous êtes en échec. Vous devez déplacer votre roi.")
+                continue
+            
+            piece = matrice[ligne_depart][colonne_depart]
+            if piece * (1 if joueur_actuel == 1 else -1) <= 0:
+                print("Erreur : Vous devez déplacer une de vos propres pièces.")
+                continue
+            
+            if not mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
+                print("Erreur : Mouvement invalide.")
+                continue
+            
+            matrice[ligne_depart][colonne_depart] = 0
+            matrice[ligne_arrivee][colonne_arrivee] = piece
+            break
+        
+        victoire = verifier_victoire(matrice, joueur_actuel)
+        if victoire:
+            print(f"Le joueur {victoire} gagne!")
+            break
+        
+        joueur_actuel = 3 - joueur_actuel
 
 jouer()
 """
