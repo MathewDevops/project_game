@@ -73,20 +73,37 @@ def trouver_pieces_adverses(matrice, joueur):
         return pieces_adverses
 
 def est_en_echec_et_mat(matrice, joueur):
-    pieces_adverses = trouver_pieces_adverses(matrice, joueur)
-    for piece in pieces_adverses:
-        ligne_depart, colonne_depart = piece
+    echec = est_en_echec(matrice, joueur)
+    
+    if not echec:
+        return False, False  # Pas en échec et mat
+    
+    pieces_joueur = trouver_pieces_joueur(matrice, joueur)
+    roi_position = trouver_roi(matrice, joueur)
+    
+    if roi_position is None:
+        return True, False  # Échec mais pas de roi
+    
+    roi_x, roi_y = roi_position
+    
+    # Générer tous les mouvements possibles pour chaque pièce du joueur en échec
+    for piece_position in pieces_joueur:
+        ligne_depart, colonne_depart = piece_position
+        type_piece = abs(matrice[ligne_depart][colonne_depart])
+        
         for ligne_arrivee in range(8):
             for colonne_arrivee in range(8):
-                type_piece = abs(matrice[ligne_depart][colonne_depart])
                 if mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece):
+                    # Simuler le mouvement
                     matrice_temp = [row[:] for row in matrice]  # Copie de la matrice pour tester le mouvement
                     matrice_temp[ligne_arrivee][colonne_arrivee] = matrice_temp[ligne_depart][colonne_depart]
-                    matrice_temp[ligne_depart][colonne_depart] = 0  # Met à jour la matrice temporaire
+                    matrice_temp[ligne_depart][colonne_depart] = 0
+                    
+                    # Vérifier si le roi peut être sauvé
                     if not est_en_echec(matrice_temp, joueur):
-                        return False, False  # Il y a un mouvement possible pour sortir de l'échec
-    return True, est_en_echec(matrice, joueur)  # Échec et mat s'il n'y a pas de mouvement possible pour sortir de l'échec
-
+                        return False, False  # Il y a un mouvement possible pour sortir de l'échec et mat
+                    
+    return True, True  # Échec et mat
 def trouver_roi(matrice, roi):
     for i in range(len(matrice)):
         for j in range(len(matrice[i])):
