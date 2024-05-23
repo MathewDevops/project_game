@@ -63,14 +63,14 @@ def est_en_echec(matrice, joueur):
                     return True
     return False
 
-def trouver_pieces_adverses(matrice, joueur):
-        pieces_adverses = []
-        for i in range(len(matrice)):
-            for j in range(len(matrice[i])):
-                piece = matrice[i][j]
-                if piece * joueur < 0:
-                    pieces_adverses.append((i, j))
-        return pieces_adverses
+def trouver_pieces_joueur(matrice, joueur):
+    pieces_joueur = []
+    for i in range(len(matrice)):
+        for j in range(len(matrice[i])):
+            piece = matrice[i][j]
+            if piece * joueur > 0:
+                pieces_joueur.append((i, j))
+    return pieces_joueur
 
 def est_en_echec_et_mat(matrice, joueur):
     echec = est_en_echec(matrice, joueur)
