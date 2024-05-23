@@ -110,8 +110,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
                 return True
         elif type_piece == pieces['cavalier']:
             if (abs(colonne_depart - colonne_arrivee) == 1 and abs(ligne_depart - ligne_arrivee) == 2) or (abs(colonne_depart - colonne_arrivee) == 2 and abs(ligne_depart - ligne_arrivee) == 1):
-                if piece_arrivee == 0 or (piece_arrivee != 0 and adverse_piece(piece_arrivee)):
-                    return True
+                return True
         elif type_piece == pieces['fou']:
             if abs(colonne_depart - colonne_arrivee) == abs(ligne_depart - ligne_arrivee):
                 step_col = 1 if colonne_arrivee > colonne_depart else -1
