@@ -13,22 +13,19 @@ def demander_coordonnees():
     print("\n")
     while True:
         try:
-            colonne_depart = input("Entrez la colonne de départ (lettre de a à h) : ").lower()
             ligne_depart = int(input("Entrez la ligne de départ : "))
-            colonne_arrivee = input("Entrez la colonne d'arrivée (lettre de a à h) : ").lower()
+            colonne_depart = int(input("Entrez la colonne de départ : "))
             ligne_arrivee = int(input("Entrez la ligne d'arrivée : "))
+            colonne_arrivee = int(input("Entrez la colonne d'arrivée : "))
             type_piece = int(input("Entrez le type de pièce (numéro) : "))
 
-            colonnes_valides = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'}
-            if colonne_depart in colonnes_valides and colonne_arrivee in colonnes_valides and 0 <= ligne_depart < 8 and 0 <= ligne_arrivee < 8:
-                colonne_depart = ord(colonne_depart) - ord('a')
-                colonne_arrivee = ord(colonne_arrivee) - ord('a')
+            # Vérifier si les coordonnées sont dans les limites de l'échiquier
+            if 0 <= ligne_depart < 8 and 0 <= colonne_depart < 8 and 0 <= ligne_arrivee < 8 and 0 <= colonne_arrivee < 8:
                 return ligne_depart, colonne_depart, ligne_arrivee, colonne_arrivee, type_piece
             else:
-                print("Erreur : Les coordonnées doivent être comprises entre a et h pour les colonnes et entre 0 et 7 pour les lignes.")
+                print("Erreur : Les coordonnées doivent être comprises entre 0 et 7.")
         except ValueError:
             print("Erreur : Veuillez entrer des nombres entiers pour les coordonnées.")
-
 
 def verifier_victoire(matrice, joueur):
     roi_joueur_1 = False
@@ -114,10 +111,7 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
         elif type_piece == pieces['cavalier']:
             if (abs(colonne_depart - colonne_arrivee) == 1 and abs(ligne_depart - ligne_arrivee) == 2) or (abs(colonne_depart - colonne_arrivee) == 2 and abs(ligne_depart - ligne_arrivee) == 1):
                 if piece_arrivee == 0 or (piece_arrivee != 0 and adverse_piece(piece_arrivee)):
-                    print("if condition valid !!")
                     return True
-            else:
-                print("condition not valid")
         elif type_piece == pieces['fou']:
             if abs(colonne_depart - colonne_arrivee) == abs(ligne_depart - ligne_arrivee):
                 step_col = 1 if colonne_arrivee > colonne_depart else -1
