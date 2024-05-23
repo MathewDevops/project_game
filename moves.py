@@ -159,8 +159,6 @@ def mouvement_est_valide(matrice, ligne_depart, colonne_depart, ligne_arrivee, c
                     return True
     return False
 
-
-
 def initialiser_matrice_jeu():
     matrice = [[0 for _ in range(8)] for _ in range(8)]
     
@@ -242,7 +240,7 @@ def jouer():
             print(f"Le joueur {victoire} gagne!")
             break
         
-        joueur_actuel = 3 - joueur_actuel
+        joueur_actuel = 3 - joueur_actuel  # Déplacer cette ligne ici
 
 jouer()
 
